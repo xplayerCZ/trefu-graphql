@@ -3,11 +3,11 @@ const { RESTDataSource } = require('apollo-datasource-rest');
 class LineAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = 'http://localhost:8080/';
+    this.baseURL = 'http://192.168.1.21:8080/';
   }
 
-  getLines() {
-    return this.get('lines');
+  getLines(params) {
+    return this.get('lines', params);
   }
 
   getLine(lineId) {

@@ -2,20 +2,26 @@ const { gql } = require('apollo-server');
 
 const typeDefs = gql`
   type Query {
-    stops: [Stop!]!
+    stops(filter: StopFilters): [Stop!]!
     stop(id: ID!): Stop!
-    routes: [Route!]!
+    routes(filter: RouteFilters): [Route!]!
     route(id: ID!): Route!
-    packets: [Packet!]!
+    packets(filter: PacketFilters): [Packet!]!
     packet(id: ID!): Packet!
-    lines: [Line!]!
+    lines(filter: LineFilters): [Line!]!
     line(id: ID!): Line!
-    connections: [Connection!]!
+    connections(filter: ConnectionFilters): [Connection!]!
     connection(id: ID!): Connection!
-    departures: [Departure!]!
+    departures(filter: DepartureFilters): [Departure!]!
     departure(id: ID!): Departure!
-    rules: [Rule!]!
+    rules(filter: RuleFilters): [Rule!]!
     rule(id: ID!): Rule!
+  }
+  
+  input StopFilters {
+    offset: Int
+    limit: Int
+    packetId: Int
   }
   
   type Stop {
@@ -27,6 +33,14 @@ const typeDefs = gql`
     routeStops: [RouteStop!]!
   }
   
+  input RouteFilters {
+    offset: Int
+    limit: Int
+    lineId: Int
+    direction: Int
+    packetId: Int
+  }
+  
   type Route {
     id: ID!
     length: Int!
@@ -36,11 +50,23 @@ const typeDefs = gql`
     line: Line!
   }
   
+  input RouteStopFilters {
+  
+  }
+  
   type RouteStop {
     route: Route!
     stop: Stop!
     index: Int!
     served: [RouteStop!]!
+  }
+  
+  input PacketFilters {
+    offset: Int
+    limit: Int
+    activeAfter:  Int
+    activeBefore: Int
+    valid: Int
   }
   
   type Packet {
@@ -51,6 +77,12 @@ const typeDefs = gql`
     lines: [Line!]!
   }
   
+  input LineFilters {
+    offset: Int
+    limit: Int
+    packetId: Int
+  }
+  
   type Line {
     id: ID!
     shortCode: String!
@@ -58,6 +90,13 @@ const typeDefs = gql`
     packet: Packet!
     routes: [Route!]!
   } 
+  
+  input ConnectionFilters {
+    offset: Int
+    limit: Int
+    routeId: Int
+    packetId: Int
+  }
   
   type Connection {
     id: ID!
@@ -67,15 +106,34 @@ const typeDefs = gql`
     connectionRules: [ConnectionRule!]!
   }
   
+  input DepartureFilters {
+    offset: Int
+    limit: Int
+    connectionId: Int
+    index: Int
+    after: Int
+    before: Int
+    packetId: Int    
+  }
+  
   type Departure {
     id: ID!
     time: String
     connection: Connection!
   }
   
+  input ConnectionRuleFilters {
+  
+  }
+  
   type ConnectionRule {
     connection: Connection!
     rule: Rule!
+  }
+  
+  input RuleFilters {
+    limit: Int
+    offset: Int
   }
   
   type Rule {

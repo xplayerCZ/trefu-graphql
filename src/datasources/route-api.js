@@ -3,11 +3,11 @@ const { RESTDataSource } = require('apollo-datasource-rest');
 class RouteAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = 'http://localhost:8080/';
+    this.baseURL = 'http://192.168.1.21:8080/';
   }
 
-  getRoutes() {
-    return this.get('routes');
+  getRoutes(params) {
+    return this.get('routes', params);
   }
 
   getRoute(routeId) {

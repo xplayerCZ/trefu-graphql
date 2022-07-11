@@ -3,11 +3,11 @@ const { RESTDataSource } = require('apollo-datasource-rest');
 class ConnectionAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = 'http://localhost:8080/';
+    this.baseURL = 'http://192.168.1.21:8080/';
   }
 
-  getConnections() {
-    return this.get('connections');
+  getConnections(params) {
+    return this.get('connections', params);
   }
 
   getConnection(connectionId) {
