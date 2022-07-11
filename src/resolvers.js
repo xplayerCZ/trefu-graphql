@@ -85,9 +85,9 @@ const resolvers = {
     },
   },
   Packet: {
-    lines: ({ lineId }, _, { dataSources })  => {
+    lines: ({ id }, _, { dataSources })  => {
       return dataSources.lineAPI.getLines({
-        lineId: lineId
+        packetId: id
       });
     },
   },
