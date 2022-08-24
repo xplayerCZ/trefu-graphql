@@ -18,10 +18,14 @@ const typeDefs = gql`
     rule(id: ID!): Rule!
   }
   
+  scalar Date
+  scalar Time
+
   input StopFilters {
     offset: Int
     limit: Int
     packetId: Int
+    forDate: Date
   }
   
   type Stop {
@@ -39,19 +43,18 @@ const typeDefs = gql`
     lineId: Int
     direction: Int
     packetId: Int
+    forDate: Date
   }
   
   type Route {
     id: ID!
     length: Int!
     direction: Int!
+    firstRouteStop: [RouteStop]!
+    lastRouteStop: [RouteStop]!
     routeStops: [RouteStop!]!
     connections: [Connection!]!
     line: Line!
-  }
-  
-  input RouteStopFilters {
-  
   }
   
   type RouteStop {
@@ -64,16 +67,18 @@ const typeDefs = gql`
   input PacketFilters {
     offset: Int
     limit: Int
-    activeAfter:  Int
-    activeBefore: Int
-    valid: Int
+    activeAfter: Date
+    activeBefore: Date
+    code: Int
+    valid: Boolean
   }
   
   type Packet {
     id: ID!
-    validFrom: Int!
-    validTo: Int!
+    activeFrom: Date!
+    activeTo: Date!
     code: Int!
+    valid: Boolean!
     lines: [Line!]!
   }
   
@@ -81,6 +86,7 @@ const typeDefs = gql`
     offset: Int
     limit: Int
     packetId: Int
+    forDate: Date
   }
   
   type Line {
@@ -96,11 +102,12 @@ const typeDefs = gql`
     limit: Int
     routeId: Int
     packetId: Int
+    forDate: Date
   }
   
   type Connection {
     id: ID!
-    route: [Route!]!
+    route: Route!
     number: Int!
     departures: [Departure!]!
     connectionRules: [ConnectionRule!]!
@@ -111,19 +118,16 @@ const typeDefs = gql`
     limit: Int
     connectionId: Int
     index: Int
-    after: Int
-    before: Int
-    packetId: Int    
+    after: Time
+    before: Time
+    packetId: Int
+    forDate: Date
   }
   
   type Departure {
     id: ID!
-    time: String
+    time: Time
     connection: Connection!
-  }
-  
-  input ConnectionRuleFilters {
-  
   }
   
   type ConnectionRule {
