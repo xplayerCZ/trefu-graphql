@@ -1,55 +1,71 @@
+const dateScalar = require("./customtypes/DateType");
+const timeScalar = require("./customtypes/TimeType");
+
 const resolvers = {
   Query: {
-    stops: (_, __, { dataSources }) => {
-      return dataSources.stopAPI.getStops();
+    stops: (_, { filter }, { dataSources }) => {
+      if (filter.forDate !== null) {
+        let formattedDate = filter.forDate.toISOString().slice(0, 10)
+        return dataSources.packetAPI.getPackets({
+          activeAfter: formattedDate,
+          activeBefore: formattedDate,
+          valid: true
+        }).then((value) => {
+          filter.packetId = value[0].id
+          delete filter.forDate
+          return dataSources.stopAPI.getStops({ ...filter });
+        });
+      } else {
+        return dataSources.stopAPI.getStops({ ...filter });
+      }
     },
 
     stop: (_, { id }, { dataSources }) => {
       return dataSources.stopAPI.getStop(id);
     },
 
-    routes: (_, { id }, { dataSources }) => {
-      return dataSources.routeAPI.getRoutes();
+    routes: (_, { filter }, { dataSources }) => {
+      return dataSources.routeAPI.getRoutes({ ...filter });
     },
 
     route: (_, { id }, { dataSources }) => {
       return dataSources.routeAPI.getRoute(id);
     },
 
-    packets: (_, { id }, { dataSources }) => {
-      return dataSources.packetAPI.getPackets();
+    packets: (_, { filter }, { dataSources }) => {
+      return dataSources.packetAPI.getPackets({ ...filter });
     },
 
     packet: (_, { id }, { dataSources }) => {
       return dataSources.packetAPI.getPacket(id);
     },
 
-    lines: (_, { id }, { dataSources }) => {
-      return dataSources.lineAPI.getLines();
+    lines: (_, { filter }, { dataSources }) => {
+      return dataSources.lineAPI.getLines({ ...filter });
     },
 
     line: (_, { id }, { dataSources }) => {
-      return dataSources.lineAPI.getLines(id);
+      return dataSources.lineAPI.getLine(id);
     },
 
-    connections: (_, { id }, { dataSources }) => {
-      return dataSources.connectionAPI.getConnections();
+    connections: (_, { filter }, { dataSources }) => {
+      return dataSources.connectionAPI.getConnections({ ...filter });
     },
 
     connection: (_, { id }, { dataSources }) => {
       return dataSources.connectionAPI.getConnection(id);
     },
 
-    departures: (_, { id }, { dataSources }) => {
-      return dataSources.departureAPI.getDepartures();
+    departures: (_, { filter }, { dataSources }) => {
+      return dataSources.departureAPI.getDepartures({ ...filter });
     },
 
     departure: (_, { id }, { dataSources }) => {
       return dataSources.departureAPI.getDeparture(id);
     },
 
-    rules: (_, { id }, { dataSources }) => {
-      return dataSources.ruleAPI.getRules();
+    rules: (_, { filter }, { dataSources }) => {
+      return dataSources.ruleAPI.getRules({ ...filter });
     },
 
     rule: (_, { id }, { dataSources }) => {
@@ -57,6 +73,8 @@ const resolvers = {
     },
 
   },
+  Date: dateScalar,
+  Time: timeScalar,
   Stop: {
     routeStops: ({ id }, _, { dataSources }) => {
       return dataSources.routeStopAPI.getRouteStops({
@@ -65,6 +83,9 @@ const resolvers = {
     },
   },
   Route: {
+    line: ({ lineId }, _, { dataSources })  => {
+      return dataSources.lineAPI.getLine(lineId);
+    },
     routeStops: ({ id }, _, { dataSources }) => {
       return dataSources.routeStopAPI.getRouteStops({
         routeId: id
@@ -73,6 +94,18 @@ const resolvers = {
     connections: ({ id }, _, { dataSources }) => {
       return dataSources.connectionAPI.getConnections({
         routeId: id
+      });
+    },
+    firstRouteStop: ({ id }, _, { dataSources }) => {
+      return dataSources.routeStopAPI.getRouteStops({
+        routeId: id,
+        index: 0
+      });
+    },
+    lastRouteStop: ({ id, length }, _, { dataSources }) => {
+      return dataSources.routeStopAPI.getRouteStops({
+        routeId: id,
+        index: length - 1
       });
     },
   },
@@ -102,6 +135,9 @@ const resolvers = {
     },
   },
   Connection: {
+    route: ({ routeId }, _, { dataSources })  => {
+      return dataSources.routeAPI.getRoute(routeId);
+    },
     departures: ({ id }, _, { dataSources })  => {
       return dataSources.departureAPI.getDepartures({
         connectionId: id
