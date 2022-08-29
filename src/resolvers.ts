@@ -5,7 +5,7 @@ const resolvers = {
   Query: {
     stops: (_, { filter }, { dataSources }) => {
       if (filter.forDate !== null) {
-        let formattedDate = filter.forDate.toISOString().slice(0, 10)
+        let formattedDate = filter.forDate
         return dataSources.packetAPI.getPackets({
           activeAfter: formattedDate,
           activeBefore: formattedDate,
@@ -57,7 +57,25 @@ const resolvers = {
     },
 
     departures: (_, { filter }, { dataSources }) => {
-      return dataSources.departureAPI.getDepartures({ ...filter });
+      if (filter.forDate !== null) {
+        let formattedDate = filter.forDate
+        return dataSources.packetAPI.getPackets({
+          activeAfter: formattedDate,
+          activeBefore: formattedDate,
+          valid: true
+        }).then((validPackets) => {
+          filter.packetId = validPackets[0].id
+          return dataSources.ruleAPI.getRules({
+            date: filter.forDate
+          }).then((validRules) => {
+            filter.ruleId = validRules[0].id
+            delete filter.forDate
+            return dataSources.departureAPI.getDepartures({ ...filter });
+          });
+        });
+      } else {
+        return dataSources.departureAPI.getDepartures({ ...filter });
+      }
     },
 
     departure: (_, { id }, { dataSources }) => {

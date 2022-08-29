@@ -24,7 +24,6 @@ const typeDefs = gql`
   input StopFilters {
     offset: Int
     limit: Int
-    packetId: Int
     forDate: Date
   }
   
@@ -42,7 +41,6 @@ const typeDefs = gql`
     limit: Int
     lineId: Int
     direction: Int
-    packetId: Int
     forDate: Date
   }
   
@@ -50,8 +48,8 @@ const typeDefs = gql`
     id: ID!
     length: Int!
     direction: Int!
-    firstRouteStop: [RouteStop]!
-    lastRouteStop: [RouteStop]!
+    firstRouteStop: [RouteStop!]!
+    lastRouteStop: [RouteStop!]!
     routeStops: [RouteStop!]!
     connections: [Connection!]!
     line: Line!
@@ -85,7 +83,6 @@ const typeDefs = gql`
   input LineFilters {
     offset: Int
     limit: Int
-    packetId: Int
     forDate: Date
   }
   
@@ -120,13 +117,13 @@ const typeDefs = gql`
     index: Int
     after: Time
     before: Time
-    packetId: Int
+    stopId: Int 
     forDate: Date
   }
   
   type Departure {
     id: ID!
-    time: Time
+    time: Time!
     connection: Connection!
   }
   
