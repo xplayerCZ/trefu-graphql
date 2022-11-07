@@ -1,11 +1,10 @@
-FROM node:16
-
+FROM node:16 as base
+EXPOSE 4000:4000
 WORKDIR /app
-
 COPY ["package.json", "package-lock.json*", "./"]
-
 RUN npm install
-
 COPY . .
 
-CMD [ "node", "src/index.js" ]
+FROM base as production
+ENV NODE_PATH=./build
+RUN npm run build
