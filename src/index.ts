@@ -15,6 +15,8 @@ const DepartureAPI = require("./datasources/departure-api");
 const RuleAPI = require("./datasources/rule-api");
 
 const API_URL = process.env.API_URL || 'http://localhost:8080/'
+const SERVER_IP = process.env.SERVER_IP || 'localhost'
+const SERVER_PORT = process.env.SERVER_PORT || 4000
 
 const server = new ApolloServer({
     typeDefs,
@@ -37,6 +39,6 @@ const server = new ApolloServer({
 });
 
 // The `listen` method launches a web server.
-server.listen().then(({url}: { url: string }) => {
+server.listen(SERVER_PORT, SERVER_IP).then(({url}: { url: string }) => {
     console.log(`🚀  Server ready at ${url}`);
 });
