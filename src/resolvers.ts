@@ -4,7 +4,7 @@ const timeScalar = require("./customtypes/TimeType");
 const resolvers = {
     Query: {
         stops: (_, {filter}, {dataSources}) => {
-            if (filter.forDate !== null) {
+            if (filter && filter.forDate) {
                 let formattedDate = filter.forDate
                 return dataSources.packetAPI.getPackets({
                     activeAfter: formattedDate,
@@ -57,7 +57,7 @@ const resolvers = {
         },
 
         departures: (_, {filter}, {dataSources}) => {
-            if (filter.forDate !== null) {
+            if (filter && filter.forDate) {
                 let formattedDate = filter.forDate
                 return dataSources.packetAPI.getPackets({
                     activeAfter: formattedDate,
