@@ -1,9 +1,9 @@
-const { RESTDataSource } = require('apollo-datasource-rest');
+const {RESTDataSource} = require('apollo-datasource-rest');
 
 class ConnectionRuleAPI extends RESTDataSource {
-    constructor() {
+    constructor(url: string) {
         super();
-        this.baseURL = 'http://192.168.1.21:8080/';
+        this.baseURL = url;
     }
 
     getConnectionRules(params) {
@@ -12,3 +12,4 @@ class ConnectionRuleAPI extends RESTDataSource {
 }
 
 module.exports = ConnectionRuleAPI;
+export {};

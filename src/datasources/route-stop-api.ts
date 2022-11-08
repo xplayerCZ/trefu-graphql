@@ -1,9 +1,9 @@
-const { RESTDataSource } = require('apollo-datasource-rest');
+const {RESTDataSource} = require('apollo-datasource-rest');
 
 class RouteStopAPI extends RESTDataSource {
-    constructor() {
+    constructor(url: string) {
         super();
-        this.baseURL = 'http://192.168.1.21:8080/';
+        this.baseURL = url;
     }
 
     getRouteStops(params) {
@@ -12,3 +12,4 @@ class RouteStopAPI extends RESTDataSource {
 }
 
 module.exports = RouteStopAPI;
+export {};

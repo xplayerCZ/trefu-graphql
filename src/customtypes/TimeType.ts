@@ -12,3 +12,4 @@ const timeScalar = new GraphQLScalarType({
 });
 
 module.exports = timeScalar
+export {};
