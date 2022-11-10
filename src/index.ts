@@ -27,7 +27,7 @@ const server = new ApolloServer({
         return {
             packetAPI: new PacketAPI(API_URL),
             lineAPI: new LineAPI(API_URL),
-            routeAPI: new RouteAPI(),
+            routeAPI: new RouteAPI(API_URL),
             routeStopAPI: new RouteStopAPI(API_URL),
             stopAPI: new StopAPI(API_URL),
             connectionAPI: new ConnectionAPI(API_URL),
