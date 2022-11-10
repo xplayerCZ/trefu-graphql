@@ -117,7 +117,9 @@ const typeDefs = gql`
     index: Int
     after: Time
     before: Time
-    stopId: Int 
+    stopId: Int
+    lineId: Int
+    routeId: Int
     forDate: Date
   }
   
