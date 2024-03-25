@@ -45,8 +45,9 @@ const typeDefs = gql`
   
   type Packet {
     id: ID!
-    validFrom: Int!
-    validTo: Int!
+    from: Int!
+    to: Int!
+    valid: Boolean!
     code: Int!
     lines: [Line!]!
   }
