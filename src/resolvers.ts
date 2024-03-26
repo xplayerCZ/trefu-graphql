@@ -60,8 +60,8 @@ const resolvers = {
             if (filter && filter.forDate) {
                 let formattedDate = filter.forDate
                 return dataSources.packetAPI.getPackets({
-                    activeAfter: formattedDate,
-                    activeBefore: formattedDate,
+                    after: formattedDate,
+                    before: formattedDate,
                     valid: true
                 }).then((validPackets) => {
                     filter.packetId = validPackets[0].id

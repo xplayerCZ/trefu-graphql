@@ -65,16 +65,16 @@ const typeDefs = gql`
   input PacketFilters {
     offset: Int
     limit: Int
-    activeAfter: Date
-    activeBefore: Date
+    after: Date
+    before: Date
     code: Int
     valid: Boolean
   }
   
   type Packet {
     id: ID!
-    activeFrom: Date!
-    activeTo: Date!
+    from: Date!
+    to: Date!
     code: Int!
     valid: Boolean!
     lines: [Line!]!
